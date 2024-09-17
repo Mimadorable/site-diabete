@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Resto</title>
+</head>
+
+<body>
+    <header>
+        <a href="#" class="logo"><span>D</span>ietFood</a>
+        <div class="menuToggle" onclick="toggleMenu();"></div>
+        <ul class="navbar">
+            <li><a href="#banniere" onclick="toggleMenu();">Accueil</a></li>
+            <li><a href="#apropos" onclick="toggleMenu();">A propos</a></li>
+            <li>
+                <a href="#menu" onmouseenter="showFilter();" onclick="showFilter();" onmouseleave="hideFilter();">Menu</a>
+                <div id="menu-filter" class="filter-content" onmouseenter="showFilter();" onmouseleave="hideFilter();">
+                    <ul><li><a href="get_recipes.php?categorie=salades" onclick="getRecipesByCategory('salades');">salades</a></li>
+                        <li><a href="get_recipes.php?categorie=plats" onclick="getRecipesByCategory('plats');">plats</a></li>
+                        <li><a href="get_recipes.php?categorie=soupes" onclick="getRecipesByCategory('soupes');">soupes</a></li>
+                        <li><a href="get_recipes.php?categorie=desserts" onclick="getRecipesByCategory('desserts');">Desserts</a></li>
+                        <li><a href="get_recipes.php?categorie=boissons" onclick="getRecipesByCategory('boissons');"> Boissons</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="#expert" onclick="toggleMenu();">Expert</a></li>
+            <li><a href="#temoignage" onclick="toggleMenu();">Temoignage</a></li>
+            <li><a href="#contact" onclick="toggleMenu();">Contact</a></li>
+        </ul>
+    </header>
+    <div id="recipes-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var menuFilter = document.getElementById("menu-filter");
+        var filterTimeout;
+
+        function toggleMenu() {
+            var navbar = document.querySelector('.navbar');
+            if (navbar.style.display === 'block') {
+                navbar.style.display = 'none';
+            } else {
+                navbar.style.display = 'block';
+            }
+        }
+
+        function showFilter() {
+            clearTimeout(filterTimeout);
+            menuFilter.style.display = "block";
+        }
+        function hideFilter() {
+            filterTimeout = setTimeout(function() {
+                menuFilter.style.display = "none";
+            }, 300);
+        }
+
+        function getRecipesByCategory(categorie) {
+        $.ajax({
+            url: 'get_recipes.php',
+            method: 'GET',
+            data: { categorie: categorie },
+            dataType: 'json',
+            success: function (recipes) {
+                var recipesList = $('#recipes-list');
+                recipesList.empty();
+
+                for (var i = 0; i < recipes.length; i++) {
+                    var recipe = recipes[i];
+                    var recipeItem = $('<li>').text(recipe.nom_recette);
+                    recipesList.append(recipeItem);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('Une erreur s\'est produite lors de la récupération des recettes.');
+            }
+        });
+    }
+
+    function displayRecipes(recipes) {
+        var recipesContainer = document.getElementById("recipes-container");
+        recipesContainer.innerHTML = "";
+
+        if (recipes.length > 0) {
+            for (var i = 0; i < recipes.length; i++) {
+                var recipe = recipes[i];
+                var recipeElement = document.createElement("div");
+                recipeElement.innerHTML = "<h3>" + recipe.nom_recette + "</h3><p>" + recipe.description_recette + "</p>";
+                recipesContainer.appendChild(recipeElement);
+            }
+        } else {
+            var noRecipesMessage = document.createElement("p");
+            noRecipesMessage.textContent = "Aucune recette disponible pour cette catégorie.";
+            recipesContainer.appendChild(noRecipesMessage);
+        }
+    }
+</script>
+
+
+
+<body>
+    
+    <div id="recipes-container"></div>
+
+<section class="banniere" id="banniere">
+        
+        <div class="contenu">
+            <h2>Que Des Plats Délicieux</h2>
+            <p>Bienvenue sur notre site dédié aux recettes pour diabétiques ! Découvrez des délices culinaires spécialement conçus pour répondre à vos besoins nutritionnels. Savourez une cuisine équilibrée et délicieuse tout en prenant soin de votre santé. Rejoignez notre communauté gourmande et inspirante dès maintenant !</p>
+            
+            <a href="index.html#menu" class="btn1">Notre Menu</a>
+            <a href="formulaire.html" class="btn2">Selon le type de diabete</a>
+        
+        </div>
+   
+</section>
+
+
+<section class="apropos" id="apropos">
+    <div class="row">
+        <div class="col50">
+            <h2 class="titre-texte"><span>A</span> Propos De Nous</h2>
+            <p>Nous sommes deux étudiants passionnés de cuisine et soucieux de promouvoir une alimentation saine.
+               À travers ce projet, nous souhaitons offrir une expérience culinaire unique en proposant des recettes délicieuses, 
+               équilibrées et spécialement conçues pour répondre aux besoins des personnes souffrant de diabète. 
+               Notre site est le fruit de nombreuses recherches et tests, et nous espérons pouvoir vous inspirer 
+               à adopter un mode de vie sain sans compromettre le plaisir de manger. Rejoignez-nous dans cette aventure
+                gastronomique et découvrez une nouvelle façon de savourer des plats délicieux, concoctés avec soin par deux
+                 étudiants passionnés.
+            </p>
+        </div>
+        <div class="col50">
+            <div class="img">
+                <img src="./images/healthy5.jpg" alt="image">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="menu" id="menu">
+    <div class="titre">
+        <h2 class="titre-texte"><span>M</span>enu</h2>
+    </div>
+    <div class="best" style="width:25rem; margin-left:60px;font-weight:600 ; font-size: x-large;margin-top: 10px;border-bottom: .8px solid;">Nos Meilleures recettes</div>
+    <div id="slider-container" class="slider-container">
+    <div class="hero-section">
+          <div class="slider">
+            <button class="slider-left"> &lt; </button>
+            <button class="slider-right">&gt;</button>
+          </div>
+            <div class="card-container">
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/galettedesrois.jpg)"></div>
+                  <h3 class="content">Galette des Rois Sans sucre-Frangipane</h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/saladeaysaumon.jpg);"></div>
+                  <h3 class="content">Salade fraicheur au saumon et agrumes </h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/tarteauxpommes.jpg)"></div>
+                  <h3 class="content">Tarte aux pommes et noisettes</h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/flancourgettes.jpg);"></div>
+                  <h3 class="content">Flan a la Ricotta aux courgettes et curry</h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/mousseauchocolat.webp);"></div>
+                  <h3 class="content">Mousse au chocolat sans sucre ajoute </h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/saladechevreepinards.jpg);"></div>
+                  <h3 class="content">Salade au chevre chaud epinards</h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/croquant.jpg);"></div>
+                  <h3 class="content"> Croquant chocolat a la creme d'orange </h3>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-box">
+                  <div class="card-background" style="background-image: url(images/veloutechevre.webp)"></div>
+                  <h3 class="content">Veloute de chou fleur au curry et chevre</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      </div>
+      
+     
+ <div class="titre">
+    <a href="#" class="btn1">Voir Plus</a>
+ </div>
+</section>
+<section class="expert" id="expert">
+    <div class="titre">
+        <h2 class="titre-texte">Nos <span>E</span>xperts</h2>
+        <p>Dans cette session nous vous presentons nos meilleurs experts de cuisine pour recettes a faible teneur en sucre   </p>
+    </div>
+    <div class="contenu">
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/equipe1.jpg" alt="">
+            </div>
+            <div class="text">
+                <h3>Franck melin</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/equipe2.jpg" alt="">
+            </div>
+            <div class="text">
+                <h3>Benoie largaut</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/equipe3.jpg" alt="">
+            </div>
+            <div class="text">
+                <h3>issam aissi</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/equipe4.jpg" alt="">
+            </div>
+            <div class="text">
+                <h3>bernard melissa</h3>
+            </div>
+        </div>
+    </div>
+ </div>
+</div>
+</section>
+ <section class="temoignage" id="temoignage">
+    <div class="titre blanc">
+        <h2 class="titre-texte">Que Disent Nos <span>C</span>lients</h2>
+        <p>On vous presente ici plusieurs avis de nos clients ! </p>
+    </div>
+    <div class="contenu">
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/t1.jpeg" alt="">
+            </div>
+            <div class="text">
+                <p>"J'ai récemment découvert ce site pour diabétiques et je dois dire que je suis extrêmement satisfait de l'expérience globale. En tant que personne atteinte de diabète de type 2, je suis toujours à la recherche de ressources et d'informations fiables pour m'aider à gérer ma condition. Ce site a vraiment dépassé mes attentes.</p>
+                <h3>Amine matue</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/t2.jpg" alt="">
+            </div>
+            <div class="text">
+                <p>La première chose qui m'a impressionné, c'est la facilité de navigation et la convivialité du site. Les différentes sections sont bien organisées, ce qui facilite la recherche d'informations spécifiques. De plus, le design est attrayant et moderne, ce qui rend la navigation encore plus agréable.</p>
+                <h3>emine armant</h3>
+            </div>
+        </div>
+        <div class="box">
+            <div class="imbox">
+                <img src="./images/t3.jpg" alt="">
+            </div>
+            <div class="text">
+                <p>je recommande vivement ce site pour diabétiques à toute personne cherchant des ressources fiables et un soutien dans la gestion du diabète. C'est un véritable atout pour la communauté diabétique, et je suis reconnaissant d'avoir trouvé un tel site</p>
+                <h3>  riba armenin </h3>
+            </div>
+        </div>
+    </div>
+ </section>
+ <section class="contact" id="contact">
+     <div class="titre noir">
+         <h2 class="titre-text"><span>C</span>ontact</h2>
+         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+     </div>
+     <div class="contactform">
+         <h3>Envoyer un message</h3>
+         <div class="inputboite">
+             <input type="text" placeholder="Nom">
+         </div>
+         <div class="inputboite">
+            <input type="text" placeholder="email">
+         </div>
+         <div class="inputboite">
+            <textarea placeholder="message"></textarea>
+         </div>
+         <div class="inputboite">
+             <input type="submit" value="envoyer">
+         </div>
+     </div>
+ </section>
+ <div class="copyright">
+     <p>site pour diabetiques  2023 <a href="#">Sekher Ghenima et Sfihi Anis</a> projet de fin d'etudes licence 2023</p>
+ </div>
+ 
+ <script type="text/javascript">
+     window.addEventListener('scroll', function(){
+         const header =document.querySelector('header');
+         header.classList.toggle("sticky", window.scrollY > 0 );
+     });
+
+     function toggleMenu(){
+         const menuToggle = document.querySelector('.menuToggle');
+         const navbar = document.querySelector('.navbar');
+         navbar.classList.toggle('active');
+         menuToggle.classList.toggle('active');
+     }
+ </script>
+ <script type="text/javascript">
+    const images = document.querySelectorAll(".banniere img");
+let currentImage = 0;
+
+setInterval(() => {
+  images[currentImage].classList.remove("active");
+  currentImage = (currentImage + 1) % images.length;
+  images[currentImage].classList.add("active");
+}, 3000);
+  </script>
+  <script type="text/javascript">
+    window.addEventListener('scroll', function(){
+        const header = document.querySelector('header');
+        header.classList.toggle("sticky", window.scrollY > 0);
+    });
+
+    function toggleMenu() {
+        const menuToggle = document.querySelector('.menuToggle');
+        const navbar = document.querySelector('.navbar');
+        navbar.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const menuContainer = document.querySelector('.card-container');
+      const sliderLeft = document.querySelector('.slider-left');
+      const sliderRight = document.querySelector('.slider-right');
+  
+      let translateValue = 0;
+      const slideAmount = 300; // Ajustez la valeur selon la largeur de vos éléments de menu
+  
+      sliderLeft.addEventListener('click', function () {
+        translateValue += slideAmount;
+        menuContainer.style.transform = `translateX(${translateValue}px)`;
+      });
+  
+      sliderRight.addEventListener('click', function () {
+        translateValue -= slideAmount;
+        menuContainer.style.transform = `translateX(${translateValue}px)`;
+      });
+    });
+  </script>
+  <Script>
+const menuContainer = document.querySelector('.card-container');
+const slideAmount = 300; // Ajustez la valeur selon la largeur de vos éléments de menu
+
+menuContainer.addEventListener('mouseenter', () => {
+  menuContainer.style.transform = `translateX(-${slideAmount}px)`;
+});
+
+menuContainer.addEventListener('mouseleave', () => {
+  menuContainer.style.transform = 'translateX(0)';
+});
+sliderLeft.addEventListener('click', () => {
+  if (translateValue < 0) {
+    translateValue += slideAmount;
+    if (translateValue > 0) {
+      translateValue = 0;
+    }
+    menuContainer.style.transform = `translateX(${translateValue}px)`;
+  }
+});
+
+</Script>
+
+</body>
+</html>
